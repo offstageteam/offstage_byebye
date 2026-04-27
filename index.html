@@ -841,7 +841,8 @@ const GUESTS = {
         heroPhoto: '',
         photos: [],
         time: '18:00',
-        music: 'zmHTjj4s4m0'
+        music: 'rYuBU7YzZ-c',
+        musicStart: 54
     },
     aiym: {
         name: 'Aiym',
@@ -1103,7 +1104,7 @@ function loadYT() {
 window.onYouTubeIframeAPIReady = function () {
     ytPlayer = new YT.Player('yt-player', {
         videoId: guest.music,
-        playerVars: { autoplay: 1, loop: 1, playlist: guest.music, controls: 0 },
+        playerVars: { autoplay: 1, loop: 1, playlist: guest.music, controls: 0, start: guest.musicStart || 0 },
         events: {
             onReady: e => { e.target.setVolume(60); e.target.playVideo(); musicPlaying = true; }
         }
