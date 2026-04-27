@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offstage · Шақыру</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg:         #07070A;
+            --bg2:        #0D0C10;
+            --bg3:        #131118;
+            --gold:       #C9A061;
+            --gold-light: #E8CC8A;
+            --gold-dim:   rgba(201,160,97,0.18);
+            --gold-glow:  rgba(201,160,97,0.06);
+            --red:        #7A1A1A;
+            --text:       #F0EBE2;
+            --text-muted: #7A6E60;
+            --border:     rgba(201,160,97,0.18);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ─── NOISE OVERLAY ─── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-size: 180px;
+        }
+
+        /* ─── BACKGROUND ORNAMENTS ─── */
+        .bg-ornaments {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orn {
+            position: absolute;
+            opacity: 0;
+            animation: orn-drift linear infinite;
+        }
+
+        @keyframes orn-drift {
+            0%   { transform: translateY(0px)   rotate(0deg);   opacity: 0.032; }
+            50%  { transform: translateY(-28px) rotate(180deg); opacity: 0.055; }
+            100% { transform: translateY(0px)   rotate(360deg); opacity: 0.032; }
+        }
+
+        /* ─── GRADIENT RADIALS ─── */
+        .radial-top {
+            position: fixed;
+            top: -30vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80vw;
+            height: 80vw;
+            max-width: 900px;
+            max-height: 900px;
+            background: radial-gradient(ellipse, rgba(201,160,97,0.07) 0%, transparent 65%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ─── CONTENT ─── */
+        .content { position: relative; z-index: 1; }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 24px 100px;
+            position: relative;
+            text-align: center;
+        }
+
+        .brand-tag {
+            font-size: 11px;
+            letter-spacing: 0.55em;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 52px;
+            opacity: 0.75;
+        }
+
+        /* Photo */
+        .photo-wrap {
+            position: relative;
+            margin-bottom: 44px;
+        }
+
+        .photo-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid var(--gold);
+            animation: ring-pulse 4s ease-in-out infinite;
+        }
+
+        .photo-ring-1 { inset: -14px; opacity: 0.35; }
+        .photo-ring-2 { inset: -28px; opacity: 0.12; animation-delay: 0.7s; }
+        .photo-ring-3 { inset: -44px; opacity: 0.05; animation-delay: 1.4s; }
+
+        @keyframes ring-pulse {
+            0%, 100% { transform: scale(1); }
+            50%       { transform: scale(1.04); }
+        }
+
+        .hero-img {
+            width: clamp(180px, 30vw, 240px);
+            height: clamp(180px, 30vw, 240px);
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+            display: block;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, #191410 0%, #231C12 100%);
+        }
+
+        .hero-initials {
+            width: clamp(180px, 30vw, 240px);
+            height: clamp(180px, 30vw, 240px);
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #191410 0%, #231C12 100%);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(52px, 10vw, 80px);
+            color: var(--gold);
+            opacity: 0.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Name */
+        .hero-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(48px, 10vw, 96px);
+            font-weight: 300;
+            line-height: 1;
+            letter-spacing: 0.02em;
+        }
+
+        .hero-name-last {
+            display: block;
+            font-style: italic;
+            color: var(--gold-light);
+            font-size: clamp(36px, 7vw, 72px);
+            margin-top: 4px;
+        }
+
+        .hero-divider {
+            width: 72px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 28px auto;
+        }
+
+        .hero-invite {
+            font-size: clamp(14px, 2vw, 16px);
+            line-height: 2;
+            color: var(--text-muted);
+            max-width: 520px;
+            letter-spacing: 0.025em;
+        }
+
+        .hero-invite strong {
+            color: var(--text);
+            font-weight: 400;
+        }
+
+        .scroll-arrow {
+            position: absolute;
+            bottom: 36px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .scroll-arrow span {
+            font-size: 10px;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        .scroll-arrow-line {
+            width: 1px;
+            height: 48px;
+            background: linear-gradient(180deg, var(--gold), transparent);
+            animation: line-grow 2s ease-in-out infinite;
+        }
+
+        @keyframes line-grow {
+            0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+            50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+            100% { transform: scaleY(1); transform-origin: top; opacity: 0; }
+        }
+
+        /* ─── SECTION COMMON ─── */
+        .section {
+            padding: clamp(60px, 10vw, 100px) clamp(20px, 5vw, 40px);
+            max-width: 880px;
+            margin: 0 auto;
+        }
+
+        .section-full {
+            padding: clamp(60px, 10vw, 100px) clamp(20px, 5vw, 40px);
+        }
+
+        .sep {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .sep-line {
+            flex: 1;
+            height: 1px;
+        }
+
+        .sep-line-l { background: linear-gradient(90deg, transparent, var(--border)); }
+        .sep-line-r { background: linear-gradient(90deg, var(--border), transparent); }
+
+        .sep-gem {
+            width: 7px;
+            height: 7px;
+            border: 1px solid var(--gold);
+            transform: rotate(45deg);
+            opacity: 0.5;
+        }
+
+        .eyebrow {
+            font-size: 10px;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0.65;
+            text-align: center;
+            margin-top: 36px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(30px, 5vw, 50px);
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        /* ─── COUNTDOWN ─── */
+        .countdown-wrap {
+            display: flex;
+            justify-content: center;
+            gap: clamp(8px, 2.5vw, 28px);
+            flex-wrap: wrap;
+        }
+
+        .cd-card {
+            position: relative;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: clamp(18px, 4vw, 32px) clamp(14px, 3vw, 26px);
+            min-width: clamp(76px, 17vw, 130px);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .cd-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .cd-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at top, rgba(201,160,97,0.06), transparent 65%);
+            pointer-events: none;
+        }
+
+        .cd-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(44px, 9vw, 76px);
+            font-weight: 600;
+            color: var(--gold-light);
+            line-height: 1;
+            display: block;
+        }
+
+        .cd-lbl {
+            font-size: 9px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 10px;
+            display: block;
+        }
+
+        /* ─── DETAILS CARD ─── */
+        .details-card {
+            position: relative;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            padding: clamp(28px, 6vw, 52px) clamp(24px, 5vw, 48px);
+            overflow: hidden;
+        }
+
+        .details-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .details-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at top, rgba(201,160,97,0.04), transparent 55%);
+            pointer-events: none;
+        }
+
+        /* Corner ornaments */
+        .corner {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            border-color: var(--gold);
+            border-style: solid;
+            opacity: 0.25;
+        }
+        .c-tl { top: 14px; left: 14px;  border-width: 1px 0 0 1px; }
+        .c-tr { top: 14px; right: 14px; border-width: 1px 1px 0 0; }
+        .c-bl { bottom: 14px; left: 14px;  border-width: 0 0 1px 1px; }
+        .c-br { bottom: 14px; right: 14px; border-width: 0 1px 1px 0; }
+
+        .detail-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 22px 0;
+            border-bottom: 1px solid rgba(201,160,97,0.07);
+            position: relative;
+            z-index: 1;
+        }
+
+        .detail-row:first-of-type { padding-top: 0; }
+        .detail-row:last-of-type  { padding-bottom: 0; border-bottom: none; }
+
+        .detail-gem {
+            margin-top: 6px;
+            width: 7px;
+            height: 7px;
+            border: 1px solid var(--gold);
+            transform: rotate(45deg);
+            flex-shrink: 0;
+            opacity: 0.55;
+        }
+
+        .detail-label {
+            font-size: 9px;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .detail-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(22px, 4vw, 34px);
+            font-weight: 400;
+            line-height: 1.15;
+        }
+
+        .detail-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 5px;
+            letter-spacing: 0.03em;
+        }
+
+        /* ─── GALLERY ─── */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .gal-item {
+            position: relative;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .gal-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid transparent;
+            transition: border-color 0.35s;
+            pointer-events: none;
+        }
+
+        .gal-item:hover::after { border-color: var(--gold); }
+
+        .gal-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: block;
+        }
+
+        .gal-item:hover img { transform: scale(1.07); }
+
+        .gal-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #110F0C 0%, #1C1812 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .gal-ph-gem {
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--gold);
+            transform: rotate(45deg);
+            opacity: 0.18;
+        }
+
+        .gal-ph-txt {
+            font-size: 9px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            opacity: 0.35;
+        }
+
+        /* ─── FOOTER ─── */
+        .footer {
+            padding: clamp(60px, 10vw, 90px) 24px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(38px, 8vw, 68px);
+            font-weight: 300;
+            letter-spacing: 0.18em;
+            color: var(--gold);
+            margin-bottom: 14px;
+        }
+
+        .footer-sub {
+            font-size: 11px;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        /* ─── LIGHTBOX ─── */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(4,3,6,0.97);
+            z-index: 9000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+            backdrop-filter: blur(4px);
+        }
+
+        .lightbox.open { display: flex; }
+
+        .lightbox img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border: 1px solid var(--border);
+        }
+
+        .lb-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 36px;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .lb-close:hover { color: var(--text); }
+
+        /* ─── ERROR ─── */
+        .error-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+            padding: 24px;
+        }
+
+        .error-gem {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--gold);
+            transform: rotate(45deg);
+            opacity: 0.3;
+        }
+
+        .error-msg {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            color: var(--text-muted);
+        }
+
+        /* ─── FADE-UP ─── */
+        .fu {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+
+        .fu.vis {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fu-d1 { transition-delay: 0.1s; }
+        .fu-d2 { transition-delay: 0.2s; }
+        .fu-d3 { transition-delay: 0.3s; }
+        .fu-d4 { transition-delay: 0.4s; }
+    </style>
+</head>
+<body>
+
+<div class="bg-ornaments" id="bg-ornaments"></div>
+<div class="radial-top"></div>
+
+<div class="content" id="app"></div>
+
+<div class="lightbox" id="lightbox">
+    <button class="lb-close" id="lb-close">×</button>
+    <img id="lb-img" src="" alt="">
+</div>
+
+<script>
+/* ============================================================
+   GUEST DATA — edit heroPhoto, photos[], time per person
+   Photos go in photos/[id]/ folder
+   ============================================================ */
+const GUESTS = {
+    alen: {
+        name: 'Alen',
+        surname: 'Smailov',
+        heroPhoto: '',
+        photos: [],
+        time: '18:00'
+    },
+    iliyas: {
+        name: 'Iliyas',
+        surname: 'Malybayev',
+        heroPhoto: '',
+        photos: [],
+        time: '18:00'
+    },
+    zhansaya: {
+        name: 'Zhansaya',
+        surname: 'Saduakassova',
+        heroPhoto: '',
+        photos: [],
+        time: '18:00'
+    },
+    adeliya: {
+        name: 'Adeliya',
+        surname: 'Mukhtar',
+        heroPhoto: '',
+        photos: [],
+        time: '18:00'
+    },
+    aliya: {
+        name: 'Aliya',
+        surname: 'Mambetova',
+        heroPhoto: '',
+        photos: [],
+        time: '18:00'
+    },
+    alisher: {
+        name: 'Alisher',
+        surname: 'Izmukhan',
+        heroPhoto: '',
+        photos: [],
+        time: '18:00'
+    },
+    aiym: {
+        name: 'Aiym',
+        surname: 'Shaimerden',
+        heroPhoto: '',
+        photos: [],
+        time: '18:00'
+    },
+    ayaulym: {
+        name: 'Ayaulym',
+        surname: 'Massymkhanova',
+        heroPhoto: '',
+        photos: [],
+        time: '18:00'
+    }
+};
+
+const EVENT = {
+    countdownTo: new Date('2026-04-30T17:00:00'),
+    date:        '30 Сәуір, 2026',
+    day:         'Бейсенбі',
+    venue:       '«Cinema Hall» мейрамханасы',
+    address:     'Кабанбай Батыр 53'
+};
+
+/* ──── BOOT ──── */
+const params  = new URLSearchParams(location.search);
+const guestId = (params.get('id') || params.get('guest') || '').toLowerCase();
+const guest   = GUESTS[guestId];
+const app     = document.getElementById('app');
+
+if (!guest) {
+    document.title = 'Offstage · Той';
+    app.innerHTML = `
+        <div class="error-page">
+            <div class="error-gem"></div>
+            <p class="error-msg">Шақыру табылмады</p>
+        </div>`;
+} else {
+    document.title = `${guest.name} ${guest.surname} · Offstage Той`;
+    render(guest);
+    spawnOrnaments();
+    startCountdown();
+    initScrollFade();
+}
+
+/* ──── RENDER ──── */
+function render(g) {
+    const initials = g.name[0] + g.surname[0];
+
+    const photoHtml = g.heroPhoto
+        ? `<img class="hero-img" src="${esc(g.heroPhoto)}" alt="${esc(g.name)}">`
+        : `<div class="hero-initials">${initials}</div>`;
+
+    const galleryHtml = g.photos.length
+        ? g.photos.map((src, i) => `
+            <div class="gal-item fu fu-d${(i % 4) + 1}" onclick="openLB('${esc(src)}')">
+                <img src="${esc(src)}" alt="Естелік" loading="lazy">
+            </div>`).join('')
+        : Array(6).fill(0).map((_, i) => `
+            <div class="gal-item fu fu-d${(i % 4) + 1}">
+                <div class="gal-placeholder">
+                    <div class="gal-ph-gem"></div>
+                    <span class="gal-ph-txt">Фото</span>
+                </div>
+            </div>`).join('');
+
+    app.innerHTML = `
+        <!-- ── HERO ── -->
+        <section class="hero">
+            <p class="brand-tag">OFFSTAGE · 2026</p>
+
+            <div class="photo-wrap fu">
+                <div class="photo-ring photo-ring-1"></div>
+                <div class="photo-ring photo-ring-2"></div>
+                <div class="photo-ring photo-ring-3"></div>
+                ${photoHtml}
+            </div>
+
+            <h1 class="hero-name fu fu-d1">
+                ${esc(g.name)}
+                <span class="hero-name-last">${esc(g.surname)}</span>
+            </h1>
+
+            <div class="hero-divider"></div>
+
+            <p class="hero-invite fu fu-d2">
+                Құрметті <strong>${esc(g.name)} ${esc(g.surname)}</strong>,<br>
+                Сізді <strong>Offstage</strong> клубымыздың<br>
+                түлектерін шығарып салу<br>
+                салтанатты тойына қонақ болуға шақырамыз.
+            </p>
+
+            <div class="scroll-arrow">
+                <span>Төмен</span>
+                <div class="scroll-arrow-line"></div>
+            </div>
+        </section>
+
+        <!-- ── COUNTDOWN ── -->
+        <div class="section-full">
+            <div class="sep"><div class="sep-line sep-line-l"></div><div class="sep-gem"></div><div class="sep-line sep-line-r"></div></div>
+            <p class="eyebrow">Тойға дейін</p>
+            <h2 class="section-title fu">Уақыт санауы</h2>
+
+            <div class="countdown-wrap">
+                <div class="cd-card fu fu-d1"><span class="cd-num" id="cd-d">--</span><span class="cd-lbl">Күн</span></div>
+                <div class="cd-card fu fu-d2"><span class="cd-num" id="cd-h">--</span><span class="cd-lbl">Сағат</span></div>
+                <div class="cd-card fu fu-d3"><span class="cd-num" id="cd-m">--</span><span class="cd-lbl">Минут</span></div>
+                <div class="cd-card fu fu-d4"><span class="cd-num" id="cd-s">--</span><span class="cd-lbl">Секунд</span></div>
+            </div>
+        </div>
+
+        <!-- ── DETAILS ── -->
+        <div class="section">
+            <div class="sep"><div class="sep-line sep-line-l"></div><div class="sep-gem"></div><div class="sep-line sep-line-r"></div></div>
+            <p class="eyebrow">Мәліметтер</p>
+            <h2 class="section-title fu">Той туралы</h2>
+
+            <div class="details-card fu">
+                <div class="corner c-tl"></div>
+                <div class="corner c-tr"></div>
+                <div class="corner c-bl"></div>
+                <div class="corner c-br"></div>
+
+                <div class="detail-row">
+                    <div class="detail-gem"></div>
+                    <div>
+                        <div class="detail-label">Күні</div>
+                        <div class="detail-value">${EVENT.date}</div>
+                        <div class="detail-sub">${EVENT.day}</div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-gem"></div>
+                    <div>
+                        <div class="detail-label">Уақыты</div>
+                        <div class="detail-value">${esc(g.time)}</div>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-gem"></div>
+                    <div>
+                        <div class="detail-label">Мекенжай</div>
+                        <div class="detail-value">${EVENT.venue}</div>
+                        <div class="detail-sub">${EVENT.address}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── GALLERY ── -->
+        <div class="section">
+            <div class="sep"><div class="sep-line sep-line-l"></div><div class="sep-gem"></div><div class="sep-line sep-line-r"></div></div>
+            <p class="eyebrow">Естеліктер</p>
+            <h2 class="section-title fu" style="font-style:italic;">Бірге өткен сәттер</h2>
+
+            <div class="gallery-grid">
+                ${galleryHtml}
+            </div>
+        </div>
+
+        <!-- ── FOOTER ── -->
+        <footer class="footer">
+            <div class="sep"><div class="sep-line sep-line-l"></div><div class="sep-gem"></div><div class="sep-line sep-line-r"></div></div>
+            <div style="height:48px"></div>
+            <div class="footer-logo">OFFSTAGE</div>
+            <p class="footer-sub">Бірге болдық · Бірге жадымызда қаламыз</p>
+        </footer>
+    `;
+}
+
+/* ──── COUNTDOWN ──── */
+function startCountdown() {
+    function tick() {
+        const diff = EVENT.countdownTo - new Date();
+        if (diff <= 0) {
+            ['cd-d','cd-h','cd-m','cd-s'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = '00'; });
+            return;
+        }
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor(diff % 86400000 / 3600000);
+        const m = Math.floor(diff % 3600000 / 60000);
+        const s = Math.floor(diff % 60000 / 1000);
+        const f = n => String(n).padStart(2, '0');
+        const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = f(v); };
+        set('cd-d', d); set('cd-h', h); set('cd-m', m); set('cd-s', s);
+    }
+    tick();
+    setInterval(tick, 1000);
+}
+
+/* ──── SCROLL FADE ──── */
+function initScrollFade() {
+    const io = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    setTimeout(() => document.querySelectorAll('.fu').forEach(el => io.observe(el)), 80);
+}
+
+/* ──── ORNAMENTS ──── */
+function spawnOrnaments() {
+    const c = document.getElementById('bg-ornaments');
+    const shapes = [
+        `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="84" height="84" stroke="#C9A061" stroke-width="0.8"/><rect x="22" y="22" width="56" height="56" stroke="#C9A061" stroke-width="0.6" transform="rotate(45 50 50)"/><circle cx="50" cy="50" r="6" fill="#C9A061"/></svg>`,
+        `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="40,4 76,76 4,76" stroke="#C9A061" stroke-width="0.8" fill="none"/><polygon points="40,18 64,66 16,66" stroke="#C9A061" stroke-width="0.5" fill="none"/><circle cx="40" cy="40" r="4" fill="#C9A061"/></svg>`,
+        `<svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="62" height="62" stroke="#C9A061" stroke-width="0.8" transform="rotate(45 35 35)"/><rect x="16" y="16" width="38" height="38" stroke="#C9A061" stroke-width="0.5" transform="rotate(45 35 35)"/></svg>`,
+        `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="2" x2="30" y2="58" stroke="#C9A061" stroke-width="0.6"/><line x1="2" y1="30" x2="58" y2="30" stroke="#C9A061" stroke-width="0.6"/><line x1="8" y1="8" x2="52" y2="52" stroke="#C9A061" stroke-width="0.4"/><line x1="52" y1="8" x2="8" y2="52" stroke="#C9A061" stroke-width="0.4"/><circle cx="30" cy="30" r="20" stroke="#C9A061" stroke-width="0.6"/><circle cx="30" cy="30" r="5" fill="#C9A061"/></svg>`,
+    ];
+
+    for (let i = 0; i < 14; i++) {
+        const div = document.createElement('div');
+        div.className = 'orn';
+        const size = 50 + Math.random() * 130;
+        div.style.cssText = `
+            left:${Math.random()*100}%;
+            top:${Math.random()*100}%;
+            width:${size}px; height:${size}px;
+            animation-duration:${22 + Math.random()*28}s;
+            animation-delay:${-Math.random()*25}s;
+        `;
+        div.innerHTML = shapes[i % shapes.length];
+        c.appendChild(div);
+    }
+}
+
+/* ──── LIGHTBOX ──── */
+function openLB(src) {
+    document.getElementById('lb-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+}
+
+document.getElementById('lb-close').onclick = closeLB;
+document.getElementById('lightbox').onclick = e => { if (e.target === e.currentTarget) closeLB(); };
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLB(); });
+
+function closeLB() { document.getElementById('lightbox').classList.remove('open'); }
+
+/* ──── UTILS ──── */
+function esc(str) {
+    return String(str)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
