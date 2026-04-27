@@ -433,8 +433,34 @@
             .gallery-grid.landscape { grid-template-columns: 1fr; }
         }
 
-        .landscape .gal-item {
-            aspect-ratio: 16/9;
+        .landscape .gal-item { aspect-ratio: 16/9; }
+
+        /* Bento grid */
+        .gallery-grid.bento {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .gallery-grid.bento .gal-item:nth-child(1) {
+            grid-column: span 2;
+            aspect-ratio: 4/3;
+        }
+
+        .gallery-grid.bento .gal-item:nth-child(2) {
+            grid-column: span 1;
+            aspect-ratio: 2/3;
+        }
+
+        .gallery-grid.bento .gal-item:nth-child(3),
+        .gallery-grid.bento .gal-item:nth-child(4),
+        .gallery-grid.bento .gal-item:nth-child(5) {
+            grid-column: span 1;
+            aspect-ratio: 1/1;
+        }
+
+        @media (max-width: 640px) {
+            .gallery-grid.bento { grid-template-columns: repeat(2, 1fr); }
+            .gallery-grid.bento .gal-item:nth-child(1) { grid-column: span 2; aspect-ratio: 4/3; }
+            .gallery-grid.bento .gal-item:nth-child(2) { grid-column: span 2; aspect-ratio: 4/3; }
         }
 
         .gal-item {
@@ -837,8 +863,9 @@ const GUESTS = {
     aliya: {
         name: 'Aliya',
         surname: 'Mambetova',
-        heroPhoto: '',
-        photos: [],
+        heroPhoto: 'photos/aliya/hero.jpg',
+        photos: ['photos/aliya/1.jpg','photos/aliya/2.jpg','photos/aliya/3.jpg','photos/aliya/4.jpg','photos/aliya/5.jpg'],
+        galleryStyle: 'bento',
         time: '19:00',
         music: 'audio/main.mp3'
     },
@@ -1012,7 +1039,7 @@ function render(g) {
             <p class="eyebrow">Естеліктер</p>
             <h2 class="section-title fu" style="font-style:italic;">Бірге өткен сәттер</h2>
 
-            <div class="gallery-grid${g.galleryStyle === 'landscape' ? ' landscape' : ''}">
+            <div class="gallery-grid${g.galleryStyle === 'landscape' ? ' landscape' : g.galleryStyle === 'bento' ? ' bento' : ''}">
                 ${galleryHtml}
             </div>
         </div>

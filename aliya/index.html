@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta property="og:title" content="Aliya Mambetova · Offstage Той">
     <meta property="og:description" content="Сізді Offstage клубымыздың түлектерін шығарып салу тойына шақырамыз · 30 Сәуір 2026">
-    <meta property="og:image" content="https://offstageteam.github.io/offstage_byebye/og-default.png">
+    <meta property="og:image" content="https://offstageteam.github.io/offstage_byebye/photos/aliya/hero.jpg">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://offstageteam.github.io/offstage_byebye/aliya/">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://offstageteam.github.io/offstage_byebye/og-default.png">
+    <meta name="twitter:image" content="https://offstageteam.github.io/offstage_byebye/photos/aliya/hero.jpg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Offstage · Шақыру</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -440,8 +440,34 @@
             .gallery-grid.landscape { grid-template-columns: 1fr; }
         }
 
-        .landscape .gal-item {
-            aspect-ratio: 16/9;
+        .landscape .gal-item { aspect-ratio: 16/9; }
+
+        /* Bento grid */
+        .gallery-grid.bento {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .gallery-grid.bento .gal-item:nth-child(1) {
+            grid-column: span 2;
+            aspect-ratio: 4/3;
+        }
+
+        .gallery-grid.bento .gal-item:nth-child(2) {
+            grid-column: span 1;
+            aspect-ratio: 2/3;
+        }
+
+        .gallery-grid.bento .gal-item:nth-child(3),
+        .gallery-grid.bento .gal-item:nth-child(4),
+        .gallery-grid.bento .gal-item:nth-child(5) {
+            grid-column: span 1;
+            aspect-ratio: 1/1;
+        }
+
+        @media (max-width: 640px) {
+            .gallery-grid.bento { grid-template-columns: repeat(2, 1fr); }
+            .gallery-grid.bento .gal-item:nth-child(1) { grid-column: span 2; aspect-ratio: 4/3; }
+            .gallery-grid.bento .gal-item:nth-child(2) { grid-column: span 2; aspect-ratio: 4/3; }
         }
 
         .gal-item {
@@ -845,8 +871,9 @@ const GUESTS = {
     aliya: {
         name: 'Aliya',
         surname: 'Mambetova',
-        heroPhoto: '',
-        photos: [],
+        heroPhoto: 'https://offstageteam.github.io/offstage_byebye/photos/aliya/hero.jpg',
+        photos: ['https://offstageteam.github.io/offstage_byebye/photos/aliya/1.jpg','https://offstageteam.github.io/offstage_byebye/photos/aliya/2.jpg','https://offstageteam.github.io/offstage_byebye/photos/aliya/3.jpg','https://offstageteam.github.io/offstage_byebye/photos/aliya/4.jpg','https://offstageteam.github.io/offstage_byebye/photos/aliya/5.jpg'],
+        galleryStyle: 'bento',
         time: '19:00',
         music: 'https://offstageteam.github.io/offstage_byebye/audio/main.mp3'
     },
@@ -1020,7 +1047,7 @@ function render(g) {
             <p class="eyebrow">Естеліктер</p>
             <h2 class="section-title fu" style="font-style:italic;">Бірге өткен сәттер</h2>
 
-            <div class="gallery-grid${g.galleryStyle === 'landscape' ? ' landscape' : ''}">
+            <div class="gallery-grid${g.galleryStyle === 'landscape' ? ' landscape' : g.galleryStyle === 'bento' ? ' bento' : ''}">
                 ${galleryHtml}
             </div>
         </div>
