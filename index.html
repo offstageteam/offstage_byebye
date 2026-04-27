@@ -868,8 +868,9 @@ const EVENT = {
 };
 
 /* ──── BOOT ──── */
-const params  = new URLSearchParams(location.search);
-const guestId = (window.FORCE_GUEST || params.get('id') || params.get('guest') || '').toLowerCase();
+const params    = new URLSearchParams(location.search);
+const pathGuest = location.pathname.split('/').filter(p => p && p !== 'offstage_byebye' && p !== 'index.html').pop() || '';
+const guestId   = (window.FORCE_GUEST || params.get('id') || params.get('guest') || pathGuest || '').toLowerCase();
 const guest   = GUESTS[guestId];
 const app     = document.getElementById('app');
 
