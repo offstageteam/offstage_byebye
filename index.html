@@ -424,8 +424,17 @@
             gap: 8px;
         }
 
+        .gallery-grid.landscape {
+            grid-template-columns: 1fr;
+        }
+
         @media (max-width: 640px) {
             .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .gallery-grid.landscape { grid-template-columns: 1fr; }
+        }
+
+        .landscape .gal-item {
+            aspect-ratio: 16/9;
         }
 
         .gal-item {
@@ -844,8 +853,9 @@ const GUESTS = {
     aiym: {
         name: 'Aiym',
         surname: 'Shaimerden',
-        heroPhoto: '',
-        photos: [],
+        heroPhoto: 'photos/aiym/hero.jpg',
+        photos: ['photos/aiym/1.jpg','photos/aiym/2.jpg','photos/aiym/3.jpg'],
+        galleryStyle: 'landscape',
         time: '19:00',
         music: 'audio/main.mp3'
     },
@@ -1002,7 +1012,7 @@ function render(g) {
             <p class="eyebrow">Естеліктер</p>
             <h2 class="section-title fu" style="font-style:italic;">Бірге өткен сәттер</h2>
 
-            <div class="gallery-grid">
+            <div class="gallery-grid${g.galleryStyle === 'landscape' ? ' landscape' : ''}">
                 ${galleryHtml}
             </div>
         </div>
