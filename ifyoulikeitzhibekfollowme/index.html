@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Жібек — NU Stories</title>
+<style>
+  :root {
+    --bg: #F7F5F1;
+    --surface: #FFFFFF;
+    --ink: #1A1917;
+    --ink-2: #5C5A55;
+    --ink-3: #A09D96;
+    --accent: #C8903A;
+    --accent-bg: #FDF3E3;
+    --kz-bg: #F0EDE6;
+    --border: rgba(0,0,0,0.07);
+    --border-med: rgba(0,0,0,0.11);
+    --green: #2A6E47;
+    --green-bg: #EAF4EE;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html { background: var(--bg); }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink);
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+    background: var(--bg);
+  }
+
+  /* HEADER */
+  .header {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-med);
+  }
+  .header-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 4px;
+  }
+  .header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--ink);
+  }
+  .header-meta {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 28px 0 10px;
+  }
+
+  /* RULE BLOCK */
+  .rule-block {
+    background: var(--accent-bg);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+  }
+  .rule-block p {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  /* SPINE TABLE */
+  .spine-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .spine-table tr {
+    border-bottom: 1px solid var(--border);
+  }
+  .spine-table tr:last-child {
+    border-bottom: none;
+  }
+  .spine-table td {
+    padding: 9px 0;
+    vertical-align: top;
+  }
+  .spine-time {
+    font-weight: 600;
+    color: var(--accent);
+    width: 52px;
+    font-size: 13px;
+    padding-top: 10px;
+  }
+  .spine-arrow {
+    color: var(--ink-3);
+    width: 20px;
+    padding-top: 10px;
+    font-size: 12px;
+  }
+  .spine-concept {
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 13px;
+    display: block;
+  }
+  .spine-desc {
+    font-size: 12px;
+    color: var(--ink-2);
+    display: block;
+    margin-top: 1px;
+  }
+
+  /* CHECKLIST */
+  .checklist {
+    list-style: none;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li:active { background: var(--bg); }
+  .checklist li.done { opacity: 0.45; }
+  .checklist li.done .check-text { text-decoration: line-through; }
+
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-med);
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .done .checkbox {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .checkbox-tick {
+    display: none;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .done .checkbox-tick { display: block; }
+
+  .check-text {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+  .check-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+    background: #FDECEA;
+    color: #B03030;
+  }
+
+  /* CAMERA MOMENTS */
+  .camera-list {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .camera-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .camera-item:last-child { border-bottom: none; }
+  .camera-num {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+  .camera-body {}
+  .camera-time {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 2px;
+  }
+  .camera-desc {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+  .camera-note {
+    font-size: 12px;
+    color: var(--ink-2);
+    margin-top: 3px;
+  }
+
+  /* ACCORDION SLOTS */
+  .slots { display: flex; flex-direction: column; gap: 8px; }
+
+  .slot {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .slot-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 14px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: background 0.15s;
+  }
+  .slot-header:active { background: var(--bg); }
+
+  .slot-time {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 48px;
+    letter-spacing: -0.3px;
+  }
+
+  .slot-summary {
+    flex: 1;
+  }
+  .slot-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .slot-sub {
+    font-size: 12px;
+    color: var(--ink-2);
+    margin-top: 1px;
+  }
+
+  .slot-chevron {
+    color: var(--ink-3);
+    font-size: 13px;
+    transition: transform 0.2s;
+    min-width: 16px;
+    text-align: center;
+  }
+  .slot.open .slot-chevron {
+    transform: rotate(90deg);
+  }
+
+  .slot-body {
+    display: none;
+    padding: 0 14px 14px;
+    border-top: 1px solid var(--border);
+  }
+  .slot.open .slot-body {
+    display: block;
+  }
+
+  /* FORMAT BADGE */
+  .badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 12px 0 10px;
+  }
+  .badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 3px 8px;
+    border-radius: 5px;
+    background: var(--bg);
+    color: var(--ink-2);
+    border: 1px solid var(--border-med);
+  }
+  .badge.accent {
+    background: var(--accent-bg);
+    color: var(--accent);
+    border-color: rgba(200,144,58,0.2);
+  }
+
+  /* CONTENT BLOCKS */
+  .block {
+    margin-bottom: 12px;
+  }
+  .block-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 5px;
+  }
+  .block-text {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .block-text li {
+    padding-left: 14px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+  .block-text li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--ink-3);
+  }
+  .block-text ul { list-style: none; }
+
+  /* KAZAKH BLOCK */
+  .kz-block {
+    background: var(--kz-bg);
+    border-radius: var(--radius-sm);
+    padding: 11px 13px;
+    margin-top: 8px;
+  }
+  .kz-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .kz-text {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.55;
+    font-style: italic;
+  }
+  .kz-text p { margin-bottom: 6px; }
+  .kz-text p:last-child { margin-bottom: 0; }
+
+  /* STORY COUNT */
+  .story-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--ink-2);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 2px 8px;
+    margin-bottom: 12px;
+  }
+
+  /* WARNING */
+  .warn {
+    background: #FDF3E3;
+    border: 1px solid rgba(200,144,58,0.25);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #7A5520;
+    line-height: 1.45;
+    margin-top: 10px;
+  }
+  .warn strong { color: #5C3C10; }
+
+  /* SONG BLOCK */
+  .song-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+  }
+  .song-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .song-slot {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .song-steps {
+    list-style: none;
+    counter-reset: steps;
+  }
+  .song-steps li {
+    counter-increment: steps;
+    display: flex;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+  .song-steps li:last-child { border-bottom: none; }
+  .song-steps li::before {
+    content: counter(steps);
+    min-width: 20px;
+    height: 20px;
+    background: var(--bg);
+    border: 1px solid var(--border-med);
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  /* TOOLS */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .tool-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 11px 12px;
+  }
+  .tool-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .tool-use {
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+
+  /* ANNOUNCEMENT */
+  .announce-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+  }
+  .announce-meta {
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-bottom: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .announce-text {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.65;
+    white-space: pre-wrap;
+  }
+  .announce-photo {
+    background: var(--kz-bg);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.45;
+  }
+
+  /* PROMPT BLOCK */
+  .prompt-block {
+    background: var(--ink);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-top: 8px;
+  }
+  .prompt-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+  .prompt-text {
+    font-size: 15px;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.5;
+  }
+  .prompt-blank {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  /* NOTE */
+  .note {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.5;
+    padding: 10px 12px;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<!-- BEFORE FILMING -->
+<div class="section-title">Перед съёмкой — сделать это</div>
+<div class="rule-block" style="margin-bottom: 16px;">
+  <p>Записать от руки, честно и быстро:</p>
+</div>
+<div class="prompt-block">
+  <div class="prompt-label">Главная фраза дня</div>
+  <div class="prompt-text">«Одна вещь, о которой мне никто не сказал — <span class="prompt-blank">_____________</span>»</div>
+</div>
+<div class="note" style="margin-top: 8px;">Ответ на этот вопрос — эмоциональный стержень всего дня. Каждый момент должен служить этому ответу.</div>
+
+<!-- NARRATIVE ARC -->
+<div class="section-title">Нарративная дуга</div>
+<table class="spine-table">
+  <tr>
+    <td class="spine-time">10:00</td>
+    <td class="spine-arrow">→</td>
+    <td><span class="spine-concept">ЗДЕСЬ</span><span class="spine-desc">Где я сейчас</span></td>
+  </tr>
+  <tr>
+    <td class="spine-time">12:00</td>
+    <td class="spine-arrow">→</td>
+    <td><span class="spine-concept">СОМНЕНИЕ</span><span class="spine-desc">Едва не передумала</span></td>
+  </tr>
+  <tr>
+    <td class="spine-time">13:00</td>
+    <td class="spine-arrow">→</td>
+    <td><span class="spine-concept">ПРЫЖОК</span><span class="spine-desc">День, когда уехала</span></td>
+  </tr>
+  <tr>
+    <td class="spine-time">14:00</td>
+    <td class="spine-arrow">→</td>
+    <td><span class="spine-concept">РАЗРЫВ</span><span class="spine-desc">Никто здесь не знает, откуда я</span></td>
+  </tr>
+  <tr>
+    <td class="spine-time">15:00</td>
+    <td class="spine-arrow">→</td>
+    <td><span class="spine-concept">СВЯЗЬ</span><span class="spine-desc">Зрители входят в историю</span></td>
+  </tr>
+  <tr>
+    <td class="spine-time">16:00</td>
+    <td class="spine-arrow">→</td>
+    <td><span class="spine-concept">РЕАЛЬНОСТЬ</span><span class="spine-desc">Три языка — один мозг</span></td>
+  </tr>
+  <tr>
+    <td class="spine-time">17:00</td>
+    <td class="spine-arrow">→</td>
+    <td><span class="spine-concept">ИНТЕГРАЦИЯ</span><span class="spine-desc">Что сказала бы себе в 17</span></td>
+  </tr>
+</table>
+
+<!-- CHECKLIST -->
+<div class="section-title">До пятницы — чеклист</div>
+<ul class="checklist" id="checklist">
+  <li onclick="toggleCheck(this)">
+    <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+    <span class="check-text">Проверить архив фото и видео на телефоне <span class="check-tag">Первым делом</span></span>
+  </li>
+  <li onclick="toggleCheck(this)">
+    <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+    <span class="check-text">Собрать: email о зачислении в NU, фото при поступлении, документы перед отъездом, фото в аэропорту, авиабилет, клипы волейбола, фото из Испании, тетрадь с математикой</span>
+  </li>
+  <li onclick="toggleCheck(this)">
+    <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+    <span class="check-text">Найти фото себя в 17 лет — попросить у родителей если нужно <span class="check-tag">Важно</span></span>
+  </li>
+  <li onclick="toggleCheck(this)">
+    <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+    <span class="check-text">Записать закадровый голос для 12:00, 13:00, 16:00 — в Voice Memos, не по скрипту: говорить к footage, не о нём</span>
+  </li>
+  <li onclick="toggleCheck(this)">
+    <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+    <span class="check-text">Смонтировать stories в CapCut, проверить синхронизацию «As It Was»</span>
+  </li>
+  <li onclick="toggleCheck(this)">
+    <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+    <span class="check-text">Открыть Q&A стикер в 10:00 — не в 15:00 <span class="check-tag">Важно</span></span>
+  </li>
+  <li onclick="toggleCheck(this)">
+    <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+    <span class="check-text">Уточнить дату National Fair — весь 14:00 зависит от этого</span>
+  </li>
+</ul>
+
+<!-- 3 CAMERA MOMENTS -->
+<div class="section-title">3 момента на камеру</div>
+<div class="camera-list">
+  <div class="camera-item">
+    <div class="camera-num">1</div>
+    <div class="camera-body">
+      <div class="camera-time">10:00 — Энергично</div>
+      <div class="camera-desc">Представить день, показать ID NU, открыть Q&A box в третьей stories</div>
+    </div>
+  </div>
+  <div class="camera-item">
+    <div class="camera-num">2</div>
+    <div class="camera-body">
+      <div class="camera-time">15:00 — Спокойно</div>
+      <div class="camera-desc">Ответить на 2 вопроса напрямую</div>
+      <div class="camera-note">Хотя бы один — неидеально: запнуться, засмеяться, сказать «не знаю»</div>
+    </div>
+  </div>
+  <div class="camera-item">
+    <div class="camera-num">3</div>
+    <div class="camera-body">
+      <div class="camera-time">17:00 — Уставшей, как есть</div>
+      <div class="camera-desc">Говорить себе в 17. Один дубль. Без переснятия. 2 секунды тишины в конце.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TIME SLOTS -->
+<div class="section-title">По слотам</div>
+<div class="slots">
+
+  <!-- 10:00 -->
+  <div class="slot" id="slot-10">
+    <div class="slot-header" onclick="toggleSlot('slot-10')">
+      <div class="slot-time">10:00</div>
+      <div class="slot-summary">
+        <div class="slot-title">Открытие дня</div>
+        <div class="slot-sub">3 stories · на камеру</div>
+      </div>
+      <div class="slot-chevron">›</div>
+    </div>
+    <div class="slot-body">
+      <div class="badges">
+        <span class="badge accent">На камеру</span>
+        <span class="badge">3 stories</span>
+        <span class="badge">Reel</span>
+      </div>
+      <div class="block">
+        <div class="block-label">Что снимать</div>
+        <div class="block-text">
+          <ul>
+            <li>Спальня / балкон Альмерии — настоящий свет, беспорядок, не убирать</li>
+            <li>Взять NU student ID и показать в камеру</li>
+            <li>Story 3: открыть Q&A стикер — вопросы начинают копиться к 15:00</li>
+          </ul>
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-label">Говорит</div>
+        <div class="kz-block">
+          <div class="kz-label">🇰🇿 Казахша</div>
+          <div class="kz-text">
+            <p>«Мен қазір Испанияда... бірақ жүрегім NU-да. Бүгін бірге жүріңдер»</p>
+          </div>
+        </div>
+      </div>
+      <div class="warn">ID NU должен появиться снова позже — это первый якорь на весь день.</div>
+    </div>
+  </div>
+
+  <!-- 12:00 -->
+  <div class="slot" id="slot-12">
+    <div class="slot-header" onclick="toggleSlot('slot-12')">
+      <div class="slot-time">12:00</div>
+      <div class="slot-summary">
+        <div class="slot-title">Едва не передумала</div>
+        <div class="slot-sub">4–5 stories · архив + голос</div>
+      </div>
+      <div class="slot-chevron">›</div>
+    </div>
+    <div class="slot-body">
+      <div class="badges">
+        <span class="badge">4–5 stories</span>
+        <span class="badge">Архив + голос</span>
+        <span class="badge">Carousel</span>
+      </div>
+      <div class="block">
+        <div class="block-label">Что снимать / собрать</div>
+        <div class="block-text">
+          <ul>
+            <li>Старые фото поступления в NU, моменты на кампусе</li>
+            <li>Email о зачислении — показать экран</li>
+            <li>Нужна 1 фотография — некрасивая, смешная или слишком честная. Без неё — тапают насквозь</li>
+          </ul>
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-label">Структура</div>
+        <div class="block-text">
+          <ul>
+            <li>Слайд 1: хук — полный экран</li>
+            <li>Слайды 2–4: страх, сомнение, момент когда всё же решила подать</li>
+            <li>Последний слайд: зачисление — не как финал, а как начало чего-то тяжелее</li>
+          </ul>
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-label">Закадровый голос — не по скрипту</div>
+        <div class="kz-block">
+          <div class="kz-label">🇰🇿 Казахша — хук</div>
+          <div class="kz-text">
+            <p>«Мен NU-ға өтінім беруді тоқтата жаздадым»</p>
+          </div>
+        </div>
+        <div class="kz-block" style="margin-top: 6px;">
+          <div class="kz-label">🇰🇿 Казахша — последний слайд</div>
+          <div class="kz-text">
+            <p>«Бірақ одан да қиыны осыдан кейін басталды»</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13:00 -->
+  <div class="slot" id="slot-13">
+    <div class="slot-header" onclick="toggleSlot('slot-13')">
+      <div class="slot-time">13:00</div>
+      <div class="slot-summary">
+        <div class="slot-title">День, когда уехала из Казахстана</div>
+        <div class="slot-sub">5–6 stories · архив + «As It Was»</div>
+      </div>
+      <div class="slot-chevron">›</div>
+    </div>
+    <div class="slot-body">
+      <div class="badges">
+        <span class="badge">5–6 stories</span>
+        <span class="badge">Архив + голос</span>
+        <span class="badge accent">As It Was тут</span>
+      </div>
+      <div class="block">
+        <div class="block-label">Что собрать</div>
+        <div class="block-text">
+          <ul>
+            <li>Документы перед отъездом, фото в аэропорту</li>
+            <li>Авиабилет</li>
+            <li>Первое фото из Испании</li>
+          </ul>
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-label">Структура — одно предложение на story</div>
+        <div class="kz-block">
+          <div class="kz-label">🇰🇿 Казахша — формат</div>
+          <div class="kz-text">
+            <p>Бір story = бір сөйлем. Қысқа, нақты, өз сөзімен.</p>
+            <p>Мысалы: «[Сол күні не болды — бір ғана оқиға]»</p>
+            <p>Эмоция суреттен келеді — текст тек фактіні айтады.</p>
+          </div>
+        </div>
+        <div class="kz-block" style="margin-top: 6px;">
+          <div class="kz-label">🇰🇿 Казахша — полл в конце</div>
+          <div class="kz-text">
+            <p>«Сен де бара ма едің?»<br>✅ Иә &nbsp;·&nbsp; 🤔 Білмеймін</p>
+          </div>
+        </div>
+      </div>
+      <div class="warn"><strong>«As It Was»:</strong> Первая story — песня открывается над фото без слов, 4–5 секунд тишины. Потом голос входит, музыка уходит на 20%. Не наоборот.</div>
+    </div>
+  </div>
+
+  <!-- 14:00 -->
+  <div class="slot" id="slot-14">
+    <div class="slot-header" onclick="toggleSlot('slot-14')">
+      <div class="slot-time">14:00</div>
+      <div class="slot-summary">
+        <div class="slot-title">National Fair — главный момент</div>
+        <div class="slot-sub">3 stories · живое видео</div>
+      </div>
+      <div class="slot-chevron">›</div>
+    </div>
+    <div class="slot-body">
+      <div class="badges">
+        <span class="badge accent">Главный момент</span>
+        <span class="badge">3 stories</span>
+        <span class="badge">Reel · 60–90с</span>
+      </div>
+      <div class="block">
+        <div class="block-label">Что делать</div>
+        <div class="block-text">
+          <ul>
+            <li>Подойти к испанскому студенту пока камера уже снимает</li>
+            <li>Спросить: «Do you know where Kazakhstan is?» — не планировать что будет дальше</li>
+            <li>Если ошибаются — показать на карте</li>
+            <li>Сказать что-то по-казахски если спросят</li>
+            <li>Никакого закадрового голоса — только живой звук</li>
+          </ul>
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-label">Открытие и конец</div>
+        <div class="kz-block">
+          <div class="kz-label">🇰🇿 Казахша</div>
+          <div class="kz-text">
+            <p>«Бүгін National Fair бар. Мен жалғыз қазақпын. Не болғанын қараңдар»</p>
+            <p>«Міне, айырбас дегеніміз осы»</p>
+          </div>
+        </div>
+      </div>
+      <div class="warn"><strong>Это момент, который отправляют другу.</strong> Не планировать реакцию — именно это и делает его реальным. Весь день строится вокруг этого момента.</div>
+    </div>
+  </div>
+
+  <!-- 15:00 -->
+  <div class="slot" id="slot-15">
+    <div class="slot-header" onclick="toggleSlot('slot-15')">
+      <div class="slot-time">15:00</div>
+      <div class="slot-summary">
+        <div class="slot-title">Q&A — продолжение</div>
+        <div class="slot-sub">4 stories · частично на камеру</div>
+      </div>
+      <div class="slot-chevron">›</div>
+    </div>
+    <div class="slot-body">
+      <div class="badges">
+        <span class="badge accent">На камеру</span>
+        <span class="badge">4 stories</span>
+        <span class="badge">Интерактив</span>
+      </div>
+      <div class="block">
+        <div class="block-label">Структура</div>
+        <div class="block-text">
+          <ul>
+            <li>2 вопроса — ответить на камеру, без подготовки</li>
+            <li>2 вопроса — текст поверх архивного фото</li>
+            <li>Хотя бы один ответ должен быть неидеальным: запнуться, засмеяться, сказать «не знаю» — иначе Q&A убивает всё что было до</li>
+          </ul>
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-label">Полл</div>
+        <div class="kz-block">
+          <div class="kz-label">🇰🇿 Казахша</div>
+          <div class="kz-text">
+            <p>«Айырбастың ең қиыны:»<br>А) Тіл · Б) Үй сағыну · В) Бюрократия · Г) Жалғыздық</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16:00 -->
+  <div class="slot" id="slot-16">
+    <div class="slot-header" onclick="toggleSlot('slot-16')">
+      <div class="slot-time">16:00</div>
+      <div class="slot-summary">
+        <div class="slot-title">Математика на испанском</div>
+        <div class="slot-sub">3 stories · фото + голос</div>
+      </div>
+      <div class="slot-chevron">›</div>
+    </div>
+    <div class="slot-body">
+      <div class="badges">
+        <span class="badge">3 stories</span>
+        <span class="badge">Фото + голос</span>
+        <span class="badge">Feed post</span>
+      </div>
+      <div class="block">
+        <div class="block-label">Что снимать</div>
+        <div class="block-text">
+          <ul>
+            <li>Реальная страница тетради с испанской лекции — её почерк, испанская нотация</li>
+            <li>Держать в руках или лежит на столе — без украшений</li>
+          </ul>
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-label">Закадровый голос + подпись</div>
+        <div class="kz-block">
+          <div class="kz-label">🇰🇿 Казахша</div>
+          <div class="kz-text">
+            <p>«Испанша математика — бөлек нәрсе»</p>
+            <p>«Осы формулаларды ағылшынша үйрендім. Қазақша ойлаймын. Профессор испанша түсіндіреді. Миым шаршады»</p>
+          </div>
+        </div>
+      </div>
+      <div class="warn">Это единственный момент, который распространяется за пределами Казахстана — любой студент математики понимает этот опыт.</div>
+    </div>
+  </div>
+
+  <!-- 17:00 -->
+  <div class="slot" id="slot-17">
+    <div class="slot-header" onclick="toggleSlot('slot-17')">
+      <div class="slot-time">17:00</div>
+      <div class="slot-summary">
+        <div class="slot-title">Что сказала бы себе в 17</div>
+        <div class="slot-sub">2–3 stories · на камеру · один дубль</div>
+      </div>
+      <div class="slot-chevron">›</div>
+    </div>
+    <div class="slot-body">
+      <div class="badges">
+        <span class="badge accent">На камеру</span>
+        <span class="badge">2–3 stories</span>
+        <span class="badge">Closing reel</span>
+      </div>
+      <div class="block">
+        <div class="block-label">Как снимать</div>
+        <div class="block-text">
+          <ul>
+            <li>Уставшей. В чём была весь день. Не переодеваться.</li>
+            <li>Найти или показать фото себя в 17 лет — держать в кадре или показать с телефона</li>
+            <li>Говорить напрямую к той себе</li>
+            <li>Один дубль — усталость это и есть нужное состояние</li>
+            <li>В конце: 2 секунды тишины, смотреть в камеру</li>
+          </ul>
+        </div>
+      </div>
+      <div class="block">
+        <div class="block-label">Финальная фраза</div>
+        <div class="kz-block">
+          <div class="kz-label">🇰🇿 Казахша</div>
+          <div class="kz-text">
+            <p>«NU-да кездесеміз»</p>
+          </div>
+        </div>
+      </div>
+      <div class="warn">Фото в 17 лет закрывает то, что открыл 12:00. Весь день строился к этому образу — зрители просто ещё не знали об этом.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- AS IT WAS -->
+<div class="section-title">«As It Was» — Harry Styles</div>
+<div class="song-block">
+  <div class="song-title">«As It Was» — Harry Styles</div>
+  <div class="song-slot">Слот 13:00 — «День, когда уехала»</div>
+  <ol class="song-steps">
+    <li>Story 1 открывается: песня над неподвижным фото (аэропорт / документ / чья-то рука). Без голоса. 4–5 секунд.</li>
+    <li>Потом входит её голос — музыка уходит на 20% и остаётся фоном.</li>
+    <li>Песня про отъезд и перемены — казахские образы отъезда. Столкновение сильнее, чем каждый по отдельности.</li>
+  </ol>
+</div>
+
+<!-- TOOLS -->
+<div class="section-title">Инструменты</div>
+<div class="tools-grid">
+  <div class="tool-item">
+    <div class="tool-name">CapCut</div>
+    <div class="tool-use">Монтаж, наложение голоса на видео/фото</div>
+  </div>
+  <div class="tool-item">
+    <div class="tool-name">Voice Memos</div>
+    <div class="tool-use">Запись закадрового голоса</div>
+  </div>
+  <div class="tool-item">
+    <div class="tool-name">Instagram</div>
+    <div class="tool-use">Q&A стикер в 10:00</div>
+  </div>
+  <div class="tool-item">
+    <div class="tool-name">Google Drive</div>
+    <div class="tool-use">Архив фото и видео</div>
+  </div>
+</div>
+
+<!-- ONE RULE -->
+<div class="section-title">Главное правило</div>
+<div class="rule-block">
+  <p>Каждый слот должен содержать одну деталь, которая отзывается в другом слоте — образ, фраза, предмет. ID NU из 10:00 появляется снова. «Три языка» из 16:00 эхом к отъезду из 13:00. Фото в 17 лет из 17:00 закрывает сомнение из 12:00.</p>
+  <p style="margin-top: 8px;">Так 24 stories становятся одним фильмом, а не семью отдельными постами.</p>
+</div>
+
+
+<!-- BIO -->
+<div class="section-title">Её биография — шапка профиля / постер</div>
+<div class="kz-block" style="border-radius: var(--radius);">
+  <div class="kz-label">🇰🇿 Казахша</div>
+  <div class="kz-text">
+    <p>«Менің атым Жібек. NU-да математика оқимын. Қазір Испанияда испанша формула шешуге тырысып жатырмын. Волейбол ойнаймын. Үйді сағынамын. Бүгін — менің бір жұма күнім. Шынайысы»</p>
+  </div>
+</div>
+
+<!-- CAPTION STRATEGY -->
+<div class="section-title">Стратегия подписей</div>
+<div class="camera-list">
+  <div class="camera-item" style="align-items: center;">
+    <div class="camera-num" style="background: var(--green);">✓</div>
+    <div class="camera-body">
+      <div class="camera-desc">Сам пост — только казахский. Полный текст, живой голос, без перевода.</div>
+    </div>
+  </div>
+  <div class="camera-item" style="align-items: center;">
+    <div class="camera-num" style="background: var(--ink-2); font-size: 10px;">KZ</div>
+    <div class="camera-body">
+      <div class="camera-desc">Казахский — это уже statement. Жібек пишет на родном языке для тех, кому NU нужен больше всего.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleSlot(id) {
+    const slot = document.getElementById(id);
+    slot.classList.toggle('open');
+  }
+
+  function toggleCheck(item) {
+    item.classList.toggle('done');
+    // Save state to localStorage
+    saveChecklist();
+  }
+
+  function saveChecklist() {
+    const items = document.querySelectorAll('#checklist li');
+    const state = Array.from(items).map(i => i.classList.contains('done'));
+    localStorage.setItem('zhibek-checklist', JSON.stringify(state));
+  }
+
+  function loadChecklist() {
+    const state = JSON.parse(localStorage.getItem('zhibek-checklist') || '[]');
+    const items = document.querySelectorAll('#checklist li');
+    state.forEach((done, i) => {
+      if (done && items[i]) items[i].classList.add('done');
+    });
+  }
+
+  loadChecklist();
+</script>
+</body>
+</html>
